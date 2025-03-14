@@ -15,8 +15,8 @@
         padding: 0;
         box-sizing: border-box;
     }
-    
-    /* Prevent Scrolling */
+
+    /* Prevent scrolling */
     html, body {
         width: 100%;
         height: 100%;
@@ -24,14 +24,14 @@
     }
     
     /* Background Video Styling */
-    video {
+    #bg-video {
         position: fixed;
         top: 50%;
         left: 50%;
         width: 100vw;
         height: 100vh;
-        transform: translate(-50%, -50%);
         object-fit: cover;
+        transform: translate(-50%, -50%);
         z-index: -1;
     }
 
@@ -44,6 +44,7 @@
         margin: auto;
         padding: 20px;
     }
+
     h1, p {
         text-shadow: 2px 2px 5px black;
         font-size: clamp(16px, 3vw, 32px);
@@ -65,9 +66,10 @@
         width: 40%;
         max-width: 200px;
     }
+    
     #play-music { left: 5%; }
     #color-button { right: 5%; }
-    
+
     .button:hover {
         transform: scale(1.1);
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
@@ -124,10 +126,10 @@
     <button id="color-button" class="button">🎨 Click for Colors!</button>
 
     <!-- Video Background -->
-   <video autoplay loop muted playsinline id="bg-video">
-    <source src="hoilll.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="hoilll.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
     <!-- JavaScript -->
     <script>
