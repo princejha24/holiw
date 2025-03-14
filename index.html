@@ -102,21 +102,6 @@
             max-width: 250px;
         }
     }
-
-    /* Particle Effect */
-    .particle {
-        position: absolute;
-        width: var(--size);
-        height: var(--size);
-        border-radius: 50%;
-        opacity: 1;
-        animation: explode 2s ease-out forwards;
-    }
-
-    @keyframes explode {
-        0% { transform: scale(1); opacity: 1; }
-        100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
-    }
   </style>
 </head>
 <body>
@@ -156,60 +141,66 @@
             let colorButton = document.getElementById("color-button");
             let video = document.getElementById("bg-video");
 
+            // Fix for autoplay restrictions on mobile
+            function playVideo() {
+                let playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log("Video playing successfully");
+                    }).catch((error) => {
+                        console.log("Autoplay prevented, waiting for user interaction");
+                        document.addEventListener("click", () => {
+                            video.play();
+                        }, { once: true });
+                    });
+                }
+            }
+            playVideo();
+
             // Play music on button click
             playButton.addEventListener("click", function() {
                 audio.play();
                 playButton.style.display = "none"; // Hide after clicking
             });
 
-            // Fix for video pausing on mobile
-            function playVideo() {
-                video.play().catch(() => {
-                    document.addEventListener("click", () => {
-                        video.play();
-                    }, { once: true });
-                });
-            }
-            playVideo();
+            // Prevent video pausing on mobile (Touch interaction fix)
+            document.addEventListener("visibilitychange", function() {
+                if (document.visibilityState === "visible") {
+                    video.play();
+                }
+            });
 
-            // Full-Screen Color Explosion Effect (Fixed)
+            document.body.addEventListener("touchstart", function() {
+                video.play();
+            });
+
+            // Full-Screen Color Explosion Effect
             colorButton.addEventListener("click", function(event) {
                 event.preventDefault(); // Prevents any shifting effect
 
                 for (let i = 0; i < 80; i++) {
                     let particle = document.createElement("div");
-                    particle.classList.add("particle");
-
-                    let colors = ["red", "yellow", "blue", "green", "purple", "pink", "orange"];
-                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-                    let screenWidth = window.innerWidth;
-                    let screenHeight = window.innerHeight;
-
-                    let startX = Math.random() * screenWidth;
-                    let startY = Math.random() * screenHeight;
-
-                    let x = (Math.random() - 0.5) * screenWidth + "px";
-                    let y = (Math.random() - 0.5) * screenHeight + "px";
-                    let size = Math.floor(Math.random() * (80 - 40) + 40) + "px";
-
-                    particle.style.setProperty("--x", x);
-                    particle.style.setProperty("--y", y);
-                    particle.style.setProperty("--size", size);
-                    
-                    particle.style.left = startX + "px";
-                    particle.style.top = startY + "px";
-
+                    particle.style.position = "absolute";
+                    particle.style.width = "50px";
+                    particle.style.height = "50px";
+                    particle.style.borderRadius = "50%";
+                    particle.style.backgroundColor = ["red", "yellow", "blue", "green", "purple", "pink", "orange"][Math.floor(Math.random() * 7)];
                     document.body.appendChild(particle);
 
-                    // Remove particles after animation
-                    setTimeout(() => { particle.remove(); }, 2000);
-                }
-            });
+                    let x = Math.random() * window.innerWidth + "px";
+                    let y = Math.random() * window.innerHeight + "px";
 
-            // Prevent video pausing on touch (especially for mobile users)
-            document.body.addEventListener("touchstart", function() {
-                video.play();
+                    particle.animate([
+                        { transform: `translate(0, 0)`, opacity: 1 },
+                        { transform: `translate(${x}, ${y}) scale(0)`, opacity: 0 }
+                    ], {
+                        duration: 2000,
+                        easing: "ease-out",
+                        fill: "forwards"
+                    });
+
+                    setTimeout(() => particle.remove(), 2000);
+                }
             });
 
         });
@@ -217,4 +208,3 @@
 
 </body>
 </html>
-
