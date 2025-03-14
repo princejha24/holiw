@@ -15,15 +15,19 @@
         padding: 0;
         box-sizing: border-box;
     }
-
-    /* Prevent scrolling */
+    
+    /* Prevent Scrolling */
     html, body {
         width: 100%;
         height: 100%;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
-    
-    /* Background Video Styling */
+
+    /* Background Video */
     #bg-video {
         position: fixed;
         top: 50%;
@@ -35,25 +39,35 @@
         z-index: -1;
     }
 
-    /* Content Styling */
+    /* Content Box */
     .myinfo {
-        position: relative;
-        text-align: center;
+        position: absolute;
+        top: 30%;
+        width: 80%;
+        max-width: 600px;
         color: white;
-        max-width: 90vw;
-        margin: auto;
+        text-align: center;
         padding: 20px;
     }
 
+    /* Heading & Paragraph */
     h1, p {
         text-shadow: 2px 2px 5px black;
         font-size: clamp(16px, 3vw, 32px);
     }
-    
-    /* Button Styling */
+
+    /* Buttons Container */
+    .button-container {
+        position: absolute;
+        bottom: 10%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    /* Buttons */
     .button {
-        position: fixed;
-        bottom: 10px;
         padding: 12px 18px;
         background: linear-gradient(45deg, red, yellow, blue, green, purple);
         color: white;
@@ -65,48 +79,35 @@
         transition: 0.3s;
         width: 40%;
         max-width: 200px;
+        text-align: center;
     }
-    
-    #play-music { left: 5%; }
-    #color-button { right: 5%; }
 
     .button:hover {
         transform: scale(1.1);
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
     }
-    
-    /* Responsive Design */
+
+    /* Mobile View Fixes */
     @media (max-width: 768px) {
+        .myinfo {
+            top: 20%;
+        }
+
+        .button-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
         .button {
-            width: 45%;
-            font-size: 14px;
+            width: 60%;
+            max-width: 250px;
         }
-        #play-music, #color-button {
-            position: relative;
-            display: block;
-            margin: 10px auto;
-            text-align: center;
-        }
-    }
-    
-    /* Particle Effect */
-    .particle {
-        position: absolute;
-        width: var(--size);
-        height: var(--size);
-        border-radius: 50%;
-        opacity: 1;
-        animation: explode 2s ease-out forwards;
-    }
-    
-    @keyframes explode {
-        0% { transform: scale(1); opacity: 1; }
-        100% { transform: translate(calc(var(--x) * 0.5), calc(var(--y) * 0.5)) scale(0); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
+    <!-- Text Content -->
     <div class="myinfo">
       <h1 class="holi">Hey there!</h1>
       <h1>I AM PRINCE</h1>
@@ -122,11 +123,13 @@
     </audio>
 
     <!-- Buttons -->
-    <button id="play-music" class="button">🎵 Play Music</button>
-    <button id="color-button" class="button">🎨 Click for Colors!</button>
+    <div class="button-container">
+        <button id="play-music" class="button">🎵 Play Music</button>
+        <button id="color-button" class="button">🎨 Click for Colors!</button>
+    </div>
 
-    <!-- Video Background -->
-    <video autoplay loop muted playsinline id="bg-video">
+    <!-- Background Video -->
+    <video id="bg-video" autoplay loop muted playsinline>
         <source src="hoilll.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -137,11 +140,19 @@
             let audio = document.getElementById("background-audio");
             let playButton = document.getElementById("play-music");
             let colorButton = document.getElementById("color-button");
+            let video = document.getElementById("bg-video");
 
             // Play music on button click
             playButton.addEventListener("click", function() {
                 audio.play();
                 playButton.style.display = "none"; // Hide after clicking
+            });
+
+            // Ensure Video Plays on Mobile (Fix for autoplay restrictions)
+            video.play().catch(() => {
+                document.addEventListener("click", () => {
+                    video.play();
+                }, { once: true });
             });
 
             // Full-Screen Color Explosion Effect
