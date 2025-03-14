@@ -1,37 +1,73 @@
-<!DOCTYPE html>
+
+
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prince</title>
-
+  <title>Prince - Happy Holi</title>
+  
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="p.css">
+  
   <style>
+    /* Background Video Styling */
+    video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    /* Content Styling */
+    .myinfo {
+        position: relative;
+        text-align: center;
+        color: white;
+        max-width: 90vw;
+        margin: auto;
+        padding: 20px;
+    }
+    h1, p { text-shadow: 2px 2px 5px black; }
+    
     /* Button Styling */
     .button {
         position: fixed;
         bottom: 20px;
-        padding: 15px 20px;
+        padding: 10px 15px;
         background: linear-gradient(45deg, red, yellow, blue, green, purple);
         color: white;
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         transition: 0.3s;
+        width: 80%;
+        max-width: 200px;
     }
-    #play-music { left: 20px; }
-    #color-button { right: 20px; }
-
+    #play-music { left: 10%; }
+    #color-button { right: 10%; }
+    
     .button:hover {
         transform: scale(1.1);
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
     }
-
-    /* Full-Screen Color Explosion */
+    
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        .button {
+            width: 90%;
+            font-size: 14px;
+        }
+        #play-music { left: 5%; }
+        #color-button { right: 5%; }
+    }
+    
+    /* Particle Effect */
     .particle {
         position: absolute;
         width: var(--size);
@@ -40,10 +76,10 @@
         opacity: 1;
         animation: explode 2s ease-out forwards;
     }
-
+    
     @keyframes explode {
         0% { transform: scale(1); opacity: 1; }
-        100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        100% { transform: translate(calc(var(--x) * 0.5), calc(var(--y) * 0.5)) scale(0); opacity: 0; }
     }
   </style>
 </head>
@@ -52,7 +88,7 @@
     <div class="myinfo">
       <h1 class="holi">Hey there!</h1>
       <h1>I AM PRINCE</h1>
-      <p>Wishing you and your loved ones a very colourful Holi<br>May you forget all your worries and enjoy this day to the fullest.<br> 
+      <p>Wishing you and your loved ones a very colourful Holi!<br>May you forget all your worries and enjoy this day to the fullest.<br> 
         <h2 class="hue">Happy Holi!</h2>
       </p>
     </div>
@@ -86,9 +122,9 @@
                 playButton.style.display = "none"; // Hide after clicking
             });
 
-            // Full-Screen Color Explosion Effect with Bigger Particles
+            // Full-Screen Color Explosion Effect
             colorButton.addEventListener("click", function() {
-                for (let i = 0; i < 80; i++) { // Creates 80 large particles
+                for (let i = 0; i < 80; i++) {
                     let particle = document.createElement("div");
                     particle.classList.add("particle");
 
@@ -103,7 +139,7 @@
 
                     let x = (Math.random() - 0.5) * screenWidth + "px";
                     let y = (Math.random() - 0.5) * screenHeight + "px";
-                    let size = Math.floor(Math.random() * (80 - 40) + 40) + "px"; // Random size between 40px-80px
+                    let size = Math.floor(Math.random() * (80 - 40) + 40) + "px";
 
                     particle.style.setProperty("--x", x);
                     particle.style.setProperty("--y", y);
@@ -123,4 +159,3 @@
 
 </body>
 </html>
-
