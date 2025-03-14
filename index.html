@@ -19,7 +19,7 @@
     html, body {
         width: 100%;
         height: 100%;
-        overflow: hidden;
+        overflow: hidden; /* Prevents unwanted movement */
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -162,15 +162,20 @@
                 playButton.style.display = "none"; // Hide after clicking
             });
 
-            // Ensure Video Plays on Mobile (Fix for autoplay restrictions)
-            video.play().catch(() => {
-                document.addEventListener("click", () => {
-                    video.play();
-                }, { once: true });
-            });
+            // Fix for video pausing on mobile
+            function playVideo() {
+                video.play().catch(() => {
+                    document.addEventListener("click", () => {
+                        video.play();
+                    }, { once: true });
+                });
+            }
+            playVideo();
 
             // Full-Screen Color Explosion Effect (Fixed)
-            colorButton.addEventListener("click", function() {
+            colorButton.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevents any shifting effect
+
                 for (let i = 0; i < 80; i++) {
                     let particle = document.createElement("div");
                     particle.classList.add("particle");
@@ -201,8 +206,15 @@
                     setTimeout(() => { particle.remove(); }, 2000);
                 }
             });
+
+            // Prevent video pausing on touch (especially for mobile users)
+            document.body.addEventListener("touchstart", function() {
+                video.play();
+            });
+
         });
     </script>
 
 </body>
 </html>
+
